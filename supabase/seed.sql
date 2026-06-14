@@ -171,7 +171,7 @@ INSERT INTO public.exercises (name, description, muscle_group, secondary_muscles
   '/images/exercises/hip_thrust.png', 'https://youtube.com/watch?v=hip_thrust_placeholder'),
 
 -- CALVES
-('Standing Calf Raise', 'Develops calf size and ankle stiffness.', 'Calves', ARRAY[], 'Beginner', 'Dumbbells', 
+('Standing Calf Raise', 'Develops calf size and ankle stiffness.', 'Calves', ARRAY[]::text[], 'Beginner', 'Dumbbells', 
   ARRAY['Stand on a block or flat floor, holding a weight.', 'Rise up onto the balls of your feet, raising heels.', 'Lower heels fully.'],
   ARRAY['Rushing reps and bouncing at bottom.'],
   ARRAY['Pause at peak and bottom of lift to avoid elastic rebound.', 'Keep knees locked.'],
