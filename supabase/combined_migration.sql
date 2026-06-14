@@ -407,6 +407,38 @@ create table if not exists public.analytics_events (
 -- ROW LEVEL SECURITY (RLS) POLICIES Setup
 -- =========================================================================
 
+-- =========================================================================
+-- SECURITY HELPER FUNCTIONS (Bypass RLS infinite recursion)
+-- =========================================================================
+
+create or replace function public.is_coach_or_admin(user_id uuid)
+returns boolean
+security definer
+set search_path = public
+language plpgsql
+as $$
+begin
+  return exists (
+    select 1 from public.profiles
+    where id = user_id and role in ('coach', 'admin')
+  );
+end;
+$$;
+
+create or replace function public.is_admin(user_id uuid)
+returns boolean
+security definer
+set search_path = public
+language plpgsql
+as $$
+begin
+  return exists (
+    select 1 from public.profiles
+    where id = user_id and role = 'admin'
+  );
+end;
+$$;
+
 -- Helper to enable RLS on a table
 alter table public.subscriptions enable row level security;
 alter table public.profiles enable row level security;
@@ -442,13 +474,13 @@ alter table public.analytics_events enable row level security;
 -- SUBSCRIPTIONS: Read for all users. Write for Admins.
 create policy "Allow read access to subscriptions for all profiles" on public.subscriptions for select using (true);
 create policy "Allow admin full access to subscriptions" on public.subscriptions for all using (
-    exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+    public.is_admin(auth.uid())
 );
 
 -- PROFILES: Users read/write their own profiles. Coaches and Admins can view.
 create policy "Allow user access to own profile" on public.profiles for all using (auth.uid() = id);
 create policy "Allow coach read access to profiles" on public.profiles for select using (
-    exists (select 1 from public.profiles where id = auth.uid() and role in ('coach', 'admin'))
+    public.is_coach_or_admin(auth.uid())
 );
 
 -- USER PLANS & PAYMENTS: Restrict to owner.
@@ -458,11 +490,11 @@ create policy "Allow user access to own payments" on public.payments for all usi
 -- EXERCISES & CATEGORIES: Read for all. Write for Admins.
 create policy "Allow read access to exercises" on public.exercises for select using (true);
 create policy "Allow admin write to exercises" on public.exercises for all using (
-    exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+    public.is_admin(auth.uid())
 );
 create policy "Allow read access to exercise categories" on public.exercise_categories for select using (true);
 create policy "Allow admin write to categories" on public.exercise_categories for all using (
-    exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+    public.is_admin(auth.uid())
 );
 
 -- WORKOUTS & LOGS: Restrict to owner.
@@ -486,13 +518,13 @@ create policy "Allow user access to own fatigue logs" on public.muscle_fatigue_l
 -- GAMIFICATION Reference tables: Read for all. Write for Admins.
 create policy "Allow read access to achievements" on public.achievements for select using (true);
 create policy "Allow admin write to achievements" on public.achievements for all using (
-    exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+    public.is_admin(auth.uid())
 );
 create policy "Allow user access to own unlocked achievements" on public.user_achievements for all using (auth.uid() = user_id);
 
 create policy "Allow read access to challenges" on public.challenges for select using (true);
 create policy "Allow admin write to challenges" on public.challenges for all using (
-    exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+    public.is_admin(auth.uid())
 );
 create policy "Allow user access to own active challenges" on public.user_challenges for all using (auth.uid() = user_id);
 
@@ -520,12 +552,12 @@ create policy "Allow user access to own messages" on public.ai_messages for all 
 -- AUDIT, ERROR, & AI LIMIT LOGS: Restrict to owner and admin.
 create policy "Allow user to write audit logs" on public.audit_logs for insert with check (auth.uid() = user_id);
 create policy "Allow admin select access to audit logs" on public.audit_logs for select using (
-    exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+    public.is_admin(auth.uid())
 );
 
 create policy "Allow user to write error logs" on public.error_logs for insert with check (auth.uid() = user_id);
 create policy "Allow admin select access to error logs" on public.error_logs for select using (
-    exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+    public.is_admin(auth.uid())
 );
 
 create policy "Allow user access to own ai usage logs" on public.ai_usage_logs for all using (auth.uid() = user_id);
@@ -534,7 +566,7 @@ create policy "Allow user access to own ai usage logs" on public.ai_usage_logs f
 create policy "Allow users to insert their own analytics events" on public.analytics_events for insert with check (auth.uid() = user_id);
 create policy "Allow users to view their own analytics events" on public.analytics_events for select using (auth.uid() = user_id);
 create policy "Allow admins to view all analytics events" on public.analytics_events for select using (
-    exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+    public.is_admin(auth.uid())
 );
 
 -- =========================================================================

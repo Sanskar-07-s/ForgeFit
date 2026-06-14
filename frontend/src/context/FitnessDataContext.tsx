@@ -137,7 +137,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const createWorkout = async (name: string, split: string, exercisesList: any[]): Promise<boolean> => {
     try {
-      const workoutId = Math.random().toString(36).substring(2, 9);
+      const workoutId = crypto.randomUUID();
       
       const { error: errorW } = await supabase.from('workouts').insert({
         id: workoutId,
@@ -148,7 +148,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
       if (errorW) throw errorW;
 
       const exercisesPayload = exercisesList.map((ex, idx) => ({
-        id: Math.random().toString(36).substring(2, 9),
+        id: crypto.randomUUID(),
         workout_id: workoutId,
         exercise_id: ex.id,
         order_index: idx,
@@ -176,7 +176,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setsList: any[]
   ): Promise<boolean> => {
     try {
-      const logId = Math.random().toString(36).substring(2, 9);
+      const logId = crypto.randomUUID();
       
       // Calculate total volume (sum weight * reps * completed sets)
       const completedSets = setsList.filter(s => s.completed);
@@ -195,7 +195,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
       if (errorL) throw errorL;
 
       const setsPayload = setsList.map((s, idx) => ({
-        id: Math.random().toString(36).substring(2, 9),
+        id: crypto.randomUUID(),
         log_id: logId,
         exercise_id: s.exercise_id,
         set_number: idx + 1,
@@ -226,7 +226,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
         const ach = achievements.find(a => a.code === 'FIRST_WORKOUT');
         if (ach) {
           await supabase.from('user_achievements').insert({
-            id: Math.random().toString(36).substring(2, 9),
+            id: crypto.randomUUID(),
             user_id: user.id,
             achievement_id: ach.id,
           });
@@ -245,7 +245,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const logNutrition = async (calories: number, protein: number, carbs: number, fat: number, waterMl: number): Promise<boolean> => {
     try {
       const { error } = await supabase.from('nutrition_logs').insert({
-        id: Math.random().toString(36).substring(2, 9),
+        id: crypto.randomUUID(),
         user_id: user.id,
         calories,
         protein,
@@ -268,7 +268,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const logSupplement = async (creatineG: number, wheyG: number, notes?: string): Promise<boolean> => {
     try {
       const { error } = await supabase.from('supplement_logs').insert({
-        id: Math.random().toString(36).substring(2, 9),
+        id: crypto.randomUUID(),
         user_id: user.id,
         creatine_g: creatineG,
         whey_protein_g: wheyG,
@@ -288,7 +288,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const logRecovery = async (sleep: number, soreness: number, volume?: number, duration?: number): Promise<boolean> => {
     try {
-      const recoveryId = Math.random().toString(36).substring(2, 9);
+      const recoveryId = crypto.randomUUID();
       
       // Calculate recovery % based on sleep and soreness
       let recoveryPct = 100;
@@ -319,7 +319,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
       const legsF = fatigueReport.find(f => f.muscleGroup === 'Legs')?.fatiguePct || 0;
 
       const { error: errorF } = await supabase.from('muscle_fatigue_logs').insert({
-        id: Math.random().toString(36).substring(2, 9),
+        id: crypto.randomUUID(),
         user_id: user.id,
         chest_fatigue: chestF,
         back_fatigue: backF,
@@ -342,7 +342,7 @@ export const FitnessDataProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const logMeasurement = async (metrics: Partial<Measurement>): Promise<boolean> => {
     try {
       const { error } = await supabase.from('measurements').insert({
-        id: Math.random().toString(36).substring(2, 9),
+        id: crypto.randomUUID(),
         user_id: user.id,
         weight: metrics.weight || profile?.weight,
         chest: metrics.chest,
