@@ -1,0 +1,17 @@
+# ForgeFit AI - Robots Rules (v4.3)
+User-agent: *
+Allow: /
+Allow: /about
+
+# Disallow private user workspace areas
+Disallow: /dashboard
+Disallow: /onboarding
+Disallow: /coach
+Disallow: /workouts
+Disallow: /nutrition
+Disallow: /progress
+Disallow: /community
+Disallow: /settings
+Disallow: /admin
+
+Sitemap: https://forgefit-ai.vercel.app/sitemap.xml

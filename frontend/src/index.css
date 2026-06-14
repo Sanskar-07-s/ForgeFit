@@ -1,0 +1,81 @@
+/* ForgeFit AI - Global CSS Stylesheet & Glassmorphism Design Tokens (v4.3) */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-heading: 'Outfit', sans-serif;
+  }
+  
+  body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Glassmorphic Panel Utility */
+.glass-panel {
+  @apply backdrop-blur-glass border border-white/[0.08] bg-dark-card shadow-glass-dark;
+}
+
+.light .glass-panel {
+  @apply border-black/[0.06] bg-white/70 shadow-glass-light;
+}
+
+/* Glass Buttons with Glows */
+.glass-btn-primary {
+  @apply relative overflow-hidden transition-all duration-300 font-medium px-4 py-2 rounded-xl
+  bg-brand-blue/90 hover:bg-brand-blue text-white shadow-glow-blue active:scale-95;
+}
+
+.glass-btn-secondary {
+  @apply transition-all duration-300 font-medium px-4 py-2 rounded-xl
+  border border-white/10 hover:bg-white/5 text-slate-300 active:scale-95;
+}
+
+.light .glass-btn-secondary {
+  @apply border-black/10 hover:bg-black/5 text-slate-700;
+}
+
+/* Glass Inputs */
+.glass-input {
+  @apply w-full px-4 py-2.5 rounded-xl border border-white/[0.08] bg-white/5 text-white placeholder-slate-500
+  focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/30 outline-none transition-all;
+}
+
+.light .glass-input {
+  @apply border-black/[0.06] bg-black/5 text-slate-900 placeholder-slate-400
+  focus:border-brand-blue/50 focus:ring-brand-blue/30;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}

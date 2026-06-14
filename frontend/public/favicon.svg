@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="glow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+  </defs>
+  <!-- Background Glow -->
+  <circle cx="12" cy="12" r="10" fill="url(#glow-grad)" opacity="0.1" />
+  <!-- Dumbbell Shaft -->
+  <rect x="7" y="11" width="10" height="2" rx="0.5" fill="url(#glow-grad)" />
+  <!-- Dumbbell Plates Left -->
+  <rect x="5" y="8" width="2" height="8" rx="1" fill="url(#glow-grad)" />
+  <rect x="3" y="9" width="1.5" height="6" rx="0.75" fill="url(#glow-grad)" />
+  <!-- Dumbbell Plates Right -->
+  <rect x="17" y="8" width="2" height="8" rx="1" fill="url(#glow-grad)" />
+  <rect x="19" y="9" width="1.5" height="6" rx="0.75" fill="url(#glow-grad)" />
+  <!-- Core Accent Node -->
+  <circle cx="12" cy="12" r="1.5" fill="#f8fafc" />
+</svg>

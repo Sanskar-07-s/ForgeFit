@@ -1,0 +1,34 @@
+{
+  "short_name": "ForgeFit",
+  "name": "ForgeFit AI Fitness Platform",
+  "description": "Venture-backed quality AI Fitness SaaS Platform",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#090a0f",
+  "theme_color": "#2563eb",
+  "display": "standalone",
+  "orientation": "portrait",
+  "shortcuts": [
+    {
+      "name": "Workout Tracker",
+      "short_name": "Tracker",
+      "description": "Log your active training session sets",
+      "url": "/workouts",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "AI Coach",
+      "short_name": "Coach",
+      "description": "Consult the Gemini Chatbot",
+      "url": "/coach",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    }
+  ]
+}
