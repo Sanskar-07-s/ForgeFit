@@ -4,6 +4,41 @@
 -- enable Row Level Security (RLS) policies, and seed initial values.
 -- =========================================================================
 
+-- Clean up existing database tables and policies for a fresh, error-free setup
+drop table if exists public.analytics_events cascade;
+drop table if exists public.ai_usage_logs cascade;
+drop table if exists public.error_logs cascade;
+drop table if exists public.audit_logs cascade;
+drop table if exists public.ai_messages cascade;
+drop table if exists public.ai_conversations cascade;
+drop table if exists public.notifications cascade;
+drop table if exists public.likes cascade;
+drop table if exists public.comments cascade;
+drop table if exists public.posts cascade;
+drop table if exists public.user_challenges cascade;
+drop table if exists public.challenges cascade;
+drop table if exists public.user_achievements cascade;
+drop table if exists public.achievements cascade;
+drop table if exists public.muscle_fatigue_logs cascade;
+drop table if exists public.recovery_logs cascade;
+drop table if exists public.progress_photos cascade;
+drop table if exists public.measurements cascade;
+drop table if exists public.supplement_logs cascade;
+drop table if exists public.nutrition_logs cascade;
+drop table if exists public.workout_log_sets cascade;
+drop table if exists public.workout_logs cascade;
+drop table if exists public.workout_exercises cascade;
+drop table if exists public.workouts cascade;
+drop table if exists public.exercises cascade;
+drop table if exists public.exercise_categories cascade;
+drop table if exists public.payments cascade;
+drop table if exists public.user_plans cascade;
+drop table if exists public.profiles cascade;
+drop table if exists public.subscriptions cascade;
+
+drop function if exists public.is_coach_or_admin(uuid) cascade;
+drop function if exists public.is_admin(uuid) cascade;
+
 -- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
