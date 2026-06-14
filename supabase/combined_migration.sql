@@ -39,6 +39,9 @@ drop table if exists public.subscriptions cascade;
 drop function if exists public.is_coach_or_admin(uuid) cascade;
 drop function if exists public.is_admin(uuid) cascade;
 
+drop trigger if exists on_auth_user_created on auth.users;
+drop function if exists public.handle_new_user() cascade;
+
 -- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
@@ -80,6 +83,32 @@ create table if not exists public.profiles (
     role text default 'user'::text check (role in ('user', 'coach', 'admin')),
     created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
+
+-- Trigger function to automatically create a profile for new auth users
+create or replace function public.handle_new_user()
+returns trigger
+security definer
+set search_path = public
+language plpgsql
+as $$
+begin
+  insert into public.profiles (id, name, xp, level, streak, role)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'name', split_part(new.email, '@', 1)),
+    0,
+    1,
+    0,
+    'user'
+  );
+  return new;
+end;
+$$;
+
+-- Trigger to execute the function on auth user signup
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
 
 ---------------------------------------------------------
 -- 3. USER_PLANS
@@ -831,3 +860,16 @@ ON CONFLICT (name) DO UPDATE SET
 UPDATE public.exercises SET category_id = (SELECT id FROM public.exercise_categories WHERE name = 'Strength') WHERE equipment IN ('Full Gym', 'Dumbbells', 'Barbell');
 UPDATE public.exercises SET category_id = (SELECT id FROM public.exercise_categories WHERE name = 'Cardio') WHERE equipment IN ('Bodyweight') AND muscle_group IN ('Abs', 'Chest');
 UPDATE public.exercises SET category_id = (SELECT id FROM public.exercise_categories WHERE name = 'Mobility') WHERE equipment IN ('Bands');
+
+-- Backfill: Insert profiles for any existing users in auth.users that are missing one
+insert into public.profiles (id, name, xp, level, streak, role)
+select 
+  id,
+  coalesce(raw_user_meta_data->>'name', split_part(email, '@', 1)),
+  0,
+  1,
+  0,
+  'user'
+from auth.users
+where id not in (select id from public.profiles)
+on conflict (id) do nothing;
