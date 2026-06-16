@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useFitnessData } from '../context/FitnessDataContext';
 import { defaultFeatureFlags } from '@shared/feature-flags';
+import { supabase } from '../services/supabase';
 import {
   Settings as SettingsIcon,
   Download,
@@ -21,11 +22,12 @@ import {
 import confetti from 'canvas-confetti';
 
 export default function Settings() {
-  const { profile, updateProfile, refreshProfile, beginnerMode, toggleBeginnerMode } = useAuth();
+  const { user, profile, updateProfile, refreshProfile, beginnerMode, toggleBeginnerMode } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { workoutLogs, nutritionLogs, measurements } = useFitnessData();
 
   const [submitting, setSubmitting] = useState(false);
+  const [isClearingCloud, setIsClearingCloud] = useState(false);
   const [profileForm, setProfileForm] = useState({
     name: profile?.name || '',
     age: profile?.age || 25,
@@ -155,6 +157,67 @@ export default function Settings() {
       
       alert("All local ForgeFit data has been cleared. Reloading page...");
       window.location.reload();
+    }
+  };
+
+  const handleClearCloudData = async () => {
+    if (!user) return;
+    if (window.confirm("CRITICAL WARNING: This will permanently delete ALL your workout history, water/nutrition logs, measurements, and streaks from both your local device AND the Supabase cloud database. This cannot be undone. Are you sure you want to proceed?")) {
+      if (window.confirm("Are you absolutely sure? This will clear all data on the cloud server.")) {
+        setIsClearingCloud(true);
+        try {
+          const logTables = [
+            'workout_logs',
+            'nutrition_logs',
+            'supplement_logs',
+            'measurements',
+            'recovery_logs',
+            'muscle_fatigue_logs',
+            'user_achievements',
+            'user_challenges',
+            'posts',
+            'likes',
+            'comments',
+            'notifications',
+            'ai_usage_logs',
+            'workouts'
+          ];
+
+          // 1. Delete all historical logs
+          await Promise.all(
+            logTables.map(table => supabase.from(table).delete().eq('user_id', user.id))
+          );
+
+          // 2. Reset profile statistics
+          await supabase
+            .from('profiles')
+            .update({
+              xp: 0,
+              level: 1,
+              streak: 0,
+              longest_streak: 0,
+              last_workout_date: null
+            })
+            .eq('id', user.id);
+
+          // 3. Clear local storage cache
+          const keysToRemove: string[] = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('forgefit_')) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach(key => localStorage.removeItem(key));
+
+          alert("Cloud and Local hybrid database successfully wiped. Reloading workspace...");
+          window.location.reload();
+        } catch (err: any) {
+          alert("Failed to wipe cloud tables: " + err.message);
+        } finally {
+          setIsClearingCloud(false);
+        }
+      }
     }
   };
 
@@ -393,17 +456,24 @@ export default function Settings() {
           <div className="space-y-1">
             <h3 className="font-extrabold text-white text-sm">Danger Zone</h3>
             <p className="text-xs text-slate-500 max-w-xl leading-relaxed">
-              Permanently clear all ForgeFit local data. This will reset your streaks, workout history, nutrition logs, connected devices, and custom settings.
+              Permanently reset your application settings. You can clear your local cache, or perform a full cloud reset to purge your workout history, water intake, streaks, and profile statistics from both your device and the cloud database.
             </p>
           </div>
         </div>
 
-        <div className="pt-2 border-t border-white/5 flex justify-end">
+        <div className="pt-2 border-t border-white/5 flex justify-end gap-3 flex-wrap">
           <button
             onClick={handleClearSavedData}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-rose/10 border border-brand-rose/30 hover:bg-brand-rose/20 text-brand-rose transition-all"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-all"
           >
-            Clear All Saved Data
+            Reset Local Cache Only
+          </button>
+          <button
+            onClick={handleClearCloudData}
+            disabled={isClearingCloud}
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-rose/10 border border-brand-rose/30 hover:bg-brand-rose/20 text-brand-rose transition-all disabled:opacity-50"
+          >
+            {isClearingCloud ? 'Wiping Account...' : 'Wipe Cloud & Local Data'}
           </button>
         </div>
       </div>
