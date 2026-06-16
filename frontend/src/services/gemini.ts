@@ -4,6 +4,7 @@ import { Profile, WorkoutLog, NutritionLog, RecoveryLog, SupplementLog } from '@
 import { generateLocalFallbackResponse } from '@ai/fitness-chatbot';
 import { buildMemoryContextPrompt } from '@ai/memory-engine';
 import { errorMonitor } from './error-monitor';
+import { metricValidator } from './metric-validator';
 
 const MODEL_NAME = 'gemini-2.5-flash';
 const GEMINI_API_KEY = (import.meta as any).env.VITE_GEMINI_API_KEY || '';
@@ -276,7 +277,37 @@ export async function askCoach(
   supplements: SupplementLog[]
 ): Promise<string> {
   const memoryPrompt = buildMemoryContextPrompt(profile, workouts, nutrition, recovery, supplements);
-  return askGemini(memoryPrompt, userMessage, history, profile.id, profile.role, 'AI_COACH_CHAT');
+
+  const hr = metricValidator.getMetric<number>('heartrate');
+  const sleep = metricValidator.getMetric<number>('sleep');
+  const steps = metricValidator.getMetric<number>('steps');
+  const calories = metricValidator.getMetric<number>('calories');
+  const recoveryMetric = metricValidator.getMetric<number>('recovery');
+  const hrv = metricValidator.getMetric<number>('hrv');
+  const oxygen = metricValidator.getMetric<number>('bloodoxygen');
+
+  let biometricsContext = '';
+  if (hr || sleep || steps || calories || recoveryMetric || hrv || oxygen) {
+    biometricsContext = `\n\n[CONNECTED DEVICE BIOMETRIC DATA]
+${hr ? `- Heart Rate: ${hr.value} bpm (Source: ${hr.source}, Updated: ${hr.lastUpdated})` : ''}
+${sleep ? `- Sleep: ${sleep.value} hours (Source: ${sleep.source})` : ''}
+${steps ? `- Steps: ${steps.value} steps (Source: ${steps.source})` : ''}
+${calories ? `- Calories Burned: ${calories.value} kcal (Source: ${calories.source})` : ''}
+${recoveryMetric ? `- Recovery Score: ${recoveryMetric.value}% (Source: ${recoveryMetric.source})` : ''}
+${hrv ? `- HRV: ${hrv.value} ms (Source: ${hrv.source})` : ''}
+${oxygen ? `- Blood Oxygen: ${oxygen.value}% (Source: ${oxygen.source})` : ''}
+
+You must only use these verified biometric metrics. Do not fabricate or estimate any other stats.`;
+  } else {
+    biometricsContext = `\n\n[CONNECTED DEVICE BIOMETRIC DATA]
+No wearable device is currently connected. You do NOT have access to the user's heart rate, sleep, recovery, or readiness data.
+CRITICAL RULE: If the user asks for heart rate, sleep, recovery, or readiness data, you MUST respond EXACTLY with:
+"I don't currently have access to your heart rate, sleep, recovery or readiness data because no wearable device is connected."
+Do not estimate or fabricate these values.`;
+  }
+
+  const finalPrompt = `${memoryPrompt}${biometricsContext}`;
+  return askGemini(finalPrompt, userMessage, history, profile.id, profile.role, 'AI_COACH_CHAT');
 }
 
 export async function getWorkoutRecommendations(profile: Profile, workouts: WorkoutLog[]): Promise<string> {

@@ -1,27 +1,27 @@
-// ForgeFit AI - Settings, Backups & Feature Flags Page (v4.3)
+// ForgeFit AI - Settings v5.0
 
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useFitnessData } from '../context/FitnessDataContext';
 import { defaultFeatureFlags } from '@shared/feature-flags';
-import { checkCurrentPermissions, requestDevicePermission } from '../services/permissions';
-import { 
-  Settings as SettingsIcon, 
-  Download, 
-  Upload, 
-  CheckCircle, 
-  Eye, 
-  Sliders, 
-  Sun, 
+import {
+  Settings as SettingsIcon,
+  Download,
+  Upload,
+  CheckCircle,
+  Sliders,
+  Sun,
   Moon,
-  RefreshCw,
-  AlertTriangle
+  AlertTriangle,
+  Sparkles,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function Settings() {
-  const { profile, updateProfile, refreshProfile } = useAuth();
+  const { profile, updateProfile, refreshProfile, beginnerMode, toggleBeginnerMode } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { workoutLogs, nutritionLogs, measurements } = useFitnessData();
 
@@ -144,12 +144,62 @@ export default function Settings() {
 
   return (
     <div className="space-y-6">
-      
-      <div className="flex items-center gap-2 border-b border-white/5 pb-4">
-        <SettingsIcon className="w-6 h-6 text-brand-blue" />
+
+      <div className="flex items-center gap-2 border-b border-dark-border/30 pb-4">
+        <SettingsIcon className="w-6 h-6 text-brand-cyan" />
         <div>
-          <h2 className="text-2xl font-extrabold text-white">System Settings Center</h2>
-          <p className="text-xs text-slate-400">Configure visual themes, features rollout, and download backups</p>
+          <h1 className="text-2xl font-extrabold text-white">Settings</h1>
+          <p className="text-xs text-slate-500">Manage preferences, display mode, and your data</p>
+        </div>
+      </div>
+
+      {/* ── Beginner Mode Card ── */}
+      <div className="glass-panel p-6 rounded-3xl space-y-4" style={{ border: beginnerMode ? '1px solid rgba(34,211,238,0.2)' : '1px solid rgba(255,255,255,0.12)' }}>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
+              style={{ background: beginnerMode ? 'rgba(34,211,238,0.1)' : 'rgba(255,255,255,0.05)' }}>
+              {beginnerMode ? <Eye className="w-5 h-5 text-brand-cyan" /> : <EyeOff className="w-5 h-5 text-slate-500" />}
+            </div>
+            <div>
+              <h3 className="font-bold text-white text-sm">Beginner Mode</h3>
+              <p className="text-xs text-slate-500 mt-0.5 max-w-xs">
+                {beginnerMode
+                  ? 'Active — Dashboard shows only essential metrics. Advanced analytics are hidden.'
+                  : 'Disabled — All analytics, scores, and charts are visible on your dashboard.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Toggle switch */}
+          <button
+            onClick={() => { toggleBeginnerMode(); confetti({ particleCount: 20, spread: 40 }); }}
+            className={`toggle-track ${beginnerMode ? 'active' : ''} shrink-0 mt-1`}
+            role="switch"
+            aria-checked={beginnerMode}
+            aria-label="Toggle Beginner Mode"
+          >
+            <div className="toggle-thumb" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 text-xs pt-2 border-t border-dark-border/30">
+          <div className="space-y-1.5">
+            <p className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">Beginner Mode shows:</p>
+            {['Today\'s Workout','Calories','Water Tracker','Current Streak','Today\'s Mission','AI Coach'].map(item => (
+              <div key={item} className="flex items-center gap-1.5 text-brand-emerald">
+                <CheckCircle className="w-3 h-3" />{item}
+              </div>
+            ))}
+          </div>
+          <div className="space-y-1.5">
+            <p className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">Hidden in Beginner Mode:</p>
+            {['Readiness Score','Adherence Grade','Recovery Forecast','Volume Analytics','Strength Trends'].map(item => (
+              <div key={item} className="flex items-center gap-1.5 text-slate-600">
+                <EyeOff className="w-3 h-3" />{item}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

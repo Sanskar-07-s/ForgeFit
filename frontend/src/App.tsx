@@ -23,12 +23,23 @@ const Community = lazy(() => import('./pages/Community'));
 const Notifications = lazy(() => import('./pages/Notifications'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Admin = lazy(() => import('./pages/Admin'));
+const GymBuddy = lazy(() => import('./pages/GymBuddy'));
+const WorkoutSession = lazy(() => import('./pages/WorkoutSession'));
+const Devices = lazy(() => import('./pages/Devices'));
 
-// Loading Fallback Widget
+// Premium Loading Skeleton
 const SuspenseLoader = () => (
-  <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
-    <div className="w-10 h-10 border-4 border-brand-blue border-t-transparent rounded-full animate-spin" />
-    <span className="text-sm font-semibold text-slate-500 animate-pulse">Syncing environment modules...</span>
+  <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+    <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-lg animate-pulse"
+      style={{ background: 'linear-gradient(135deg, rgba(34,211,238,0.2), rgba(139,92,246,0.2))', border: '1px solid rgba(34,211,238,0.2)' }}>
+      F
+    </div>
+    <div className="flex gap-2">
+      <div className="w-2 h-2 rounded-full bg-brand-cyan animate-bounce" style={{ animationDelay: '0ms' }} />
+      <div className="w-2 h-2 rounded-full bg-brand-cyan animate-bounce" style={{ animationDelay: '150ms' }} />
+      <div className="w-2 h-2 rounded-full bg-brand-cyan animate-bounce" style={{ animationDelay: '300ms' }} />
+    </div>
+    <p className="text-xs text-slate-600 font-medium">Loading ForgeFit AI…</p>
   </div>
 );
 
@@ -91,6 +102,9 @@ function App() {
             <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
             <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/gym-buddy" element={<ProtectedRoute><GymBuddy /></ProtectedRoute>} />
+            <Route path="/coach-session" element={<ProtectedRoute><WorkoutSession /></ProtectedRoute>} />
+            <Route path="/devices" element={<ProtectedRoute><Devices /></ProtectedRoute>} />
 
             {/* Role Restricted Admin Access */}
             <Route 

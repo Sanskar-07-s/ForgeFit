@@ -10,6 +10,8 @@ interface AuthContextType {
   profile: Profile | null;
   loading: boolean;
   isOnboarded: boolean;
+  beginnerMode: boolean;
+  toggleBeginnerMode: () => void;
   login: (email: string, pass: string) => Promise<{ error: any }>;
   signup: (email: string, pass: string) => Promise<{ error: any }>;
   logout: () => Promise<void>;
@@ -24,6 +26,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOnboarded, setIsOnboarded] = useState(true);
+  const [beginnerMode, setBeginnerMode] = useState<boolean>(() => {
+    const stored = localStorage.getItem('forgefit_beginner_mode');
+    return stored === null ? true : stored === 'true'; // Default ON for new users
+  });
+
+  const toggleBeginnerMode = () => {
+    setBeginnerMode(prev => {
+      const next = !prev;
+      localStorage.setItem('forgefit_beginner_mode', String(next));
+      return next;
+    });
+  };
 
   // Load session on startup
   useEffect(() => {
@@ -183,6 +197,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         profile,
         loading,
         isOnboarded,
+        beginnerMode,
+        toggleBeginnerMode,
         login,
         signup,
         logout,

@@ -38,16 +38,38 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Interception (Cache First / Stale While Revalidate fallback)
+// Fetch Interception (Cache First for assets, Network-First for SPA routes)
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   
-  // Skip non-GET requests (e.g. Supabase POST operations are queued by offlineDb)
+  // Skip non-GET requests
   if (req.method !== 'GET') {
     return;
   }
 
-  // Handle asset requests
+  // 1. Handle SPA page navigation requests (Network-First with Cache Fallback)
+  if (req.mode === 'navigate' || (req.headers.get('accept') && req.headers.get('accept').includes('text/html'))) {
+    event.respondWith(
+      fetch(req)
+        .then((networkResponse) => {
+          // If server returns a valid page shell, cache it as /index.html
+          if (networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put('/index.html', responseToCache));
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          // Offline / Network fail: resolve with cached SPA shell
+          return caches.match('/index.html').then((cached) => {
+            return cached || caches.match('/');
+          });
+        })
+    );
+    return;
+  }
+
+  // 2. Handle static assets and api resources (Cache First / Stale While Revalidate fallback)
   event.respondWith(
     caches.match(req).then((cachedResponse) => {
       if (cachedResponse) {
@@ -64,7 +86,7 @@ self.addEventListener('fetch', (event) => {
 
       return fetch(req)
         .then((networkResponse) => {
-          // If response is valid, cache it
+          // Cache successful GET requests for resources/assets
           if (networkResponse.status === 200 && networkResponse.type === 'basic') {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
@@ -74,11 +96,7 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch((err) => {
-          // Offline Fallback for html pages
-          const accept = req.headers.get('accept');
-          if (accept && accept.includes('text/html')) {
-            return caches.match('/index.html');
-          }
+          // Fail gracefully for other assets
           throw err;
         });
     })

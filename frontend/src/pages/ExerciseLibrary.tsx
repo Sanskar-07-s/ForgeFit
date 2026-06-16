@@ -1,51 +1,63 @@
-// ForgeFit AI - Exercise Library & 2D/3D Anatomy Page (v4.3)
+// ForgeFit AI - Exercise Library (v5.0) — Premium Discovery
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useFitnessData } from '../context/FitnessDataContext';
 import { Exercise } from '@shared/types';
 import * as THREE from 'three';
-import { 
-  Search, 
-  Dumbbell, 
-  Sparkles, 
-  Maximize2, 
-  RotateCw, 
-  Eye, 
-  Layers,
+import {
+  Search,
+  Dumbbell,
+  Sparkles,
   ChevronRight,
-  Info
+  X,
+  Clock,
+  TrendingUp,
+  Layers,
 } from 'lucide-react';
+
+const POPULAR_SEARCHES = ['Bench Press','Squat','Deadlift','Pull-Ups','Shoulder Press','Plank','Bicep Curl','Lunges'];
+const MUSCLE_CHIPS = ['All','Chest','Back','Shoulders','Biceps','Triceps','Legs','Abs','Calves'];
 
 export default function ExerciseLibrary() {
   const { exercises } = useFitnessData();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedMuscle, setSelectedMuscle] = useState<string | null>(null);
+  const [selectedMuscle, setSelectedMuscle] = useState<string>('All');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
   const [selectedEquipment, setSelectedEquipment] = useState<string>('All');
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem('forgefit_recent_searches') || '[]'); } catch { return []; }
+  });
+  const [searchFocused, setSearchFocused] = useState(false);
 
-  // Tabs: Library List, 2D Anatomy, 3D Anatomy
   const [activeTab, setActiveTab] = useState<'library' | 'anatomy2d' | 'anatomy3d'>('library');
-
-  // Detail Modal
   const [detailExercise, setDetailExercise] = useState<Exercise | null>(null);
 
-  // 3D Canvas Ref
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 
-  // Filters logic
-  const filteredExercises = exercises.filter((ex) => {
-    const matchesSearch = ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ex.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesMuscle = !selectedMuscle || ex.muscle_group.toLowerCase().includes(selectedMuscle.toLowerCase());
-    
-    const matchesDifficulty = selectedDifficulty === 'All' || ex.difficulty === selectedDifficulty;
-    
-    const matchesEquipment = selectedEquipment === 'All' || ex.equipment === selectedEquipment;
+  const commitSearch = (query: string) => {
+    if (!query.trim()) return;
+    const updated = [query, ...recentSearches.filter(r => r !== query)].slice(0, 5);
+    setRecentSearches(updated);
+    localStorage.setItem('forgefit_recent_searches', JSON.stringify(updated));
+    setSearchQuery(query);
+    setSearchFocused(false);
+  };
 
-    return matchesSearch && matchesMuscle && matchesDifficulty && matchesEquipment;
+  const clearRecent = () => {
+    setRecentSearches([]);
+    localStorage.removeItem('forgefit_recent_searches');
+  };
+
+  const filteredExercises = exercises.filter(ex => {
+    const matchesSearch = !searchQuery ||
+      ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ex.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesMuscle   = selectedMuscle === 'All' || ex.muscle_group.toLowerCase().includes(selectedMuscle.toLowerCase());
+    const matchesDiff     = selectedDifficulty === 'All' || ex.difficulty === selectedDifficulty;
+    const matchesEquip    = selectedEquipment === 'All' || ex.equipment === selectedEquipment;
+    return matchesSearch && matchesMuscle && matchesDiff && matchesEquip;
   });
 
   // 3D Anatomy Three.js Mannequin setup
@@ -258,41 +270,25 @@ export default function ExerciseLibrary() {
   }, [activeTab]);
 
   return (
-    <div className="space-y-6">
-      
-      {/* Page Title & Search Bar */}
+    <div className="space-y-5">
+
+      {/* ── Header ── */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold text-white">Exercise Resource Catalog</h2>
-          <p className="text-xs text-slate-400">Filter exercises using 2D/3D anatomy muscle maps</p>
+          <h1 className="text-2xl font-extrabold text-white">Exercise Library</h1>
+          <p className="text-xs text-slate-500 mt-0.5">Find exercises by muscle, equipment, or difficulty</p>
         </div>
-        
-        {/* Navigation Tabs */}
-        <div className="flex bg-white/5 border border-white/5 p-1 rounded-xl text-xs font-bold">
-          <button 
-            onClick={() => setActiveTab('library')}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeTab === 'library' ? 'bg-brand-blue text-white' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Library List
-          </button>
-          <button 
-            onClick={() => setActiveTab('anatomy2d')}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeTab === 'anatomy2d' ? 'bg-brand-blue text-white' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            2D anatomy
-          </button>
-          <button 
-            onClick={() => setActiveTab('anatomy3d')}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeTab === 'anatomy3d' ? 'bg-brand-blue text-white' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            3D Mannequin
-          </button>
+        <div className="flex p-1 rounded-xl gap-1" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          {(['library','anatomy2d','anatomy3d'] as const).map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                activeTab === tab ? 'text-white' : 'text-slate-500 hover:text-slate-300'
+              }`}
+              style={activeTab === tab ? { background: 'linear-gradient(135deg,#22D3EE,#8B5CF6)' } : undefined}
+            >
+              {tab === 'library' ? 'Library' : tab === 'anatomy2d' ? '2D Map' : '3D Model'}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -339,88 +335,108 @@ export default function ExerciseLibrary() {
       )}
 
       {activeTab === 'library' && (
-        <div className="space-y-6 animate-fade-in">
-          {/* Controls filtering bar */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white/5 border border-white/5 p-4 rounded-2xl">
-            <div className="relative">
-              <Search className="w-4 h-4 text-slate-500 absolute left-4 top-3.5" />
-              <input 
-                type="text" 
-                placeholder="Search exercise..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="glass-input pl-12"
-              />
-            </div>
-            
-            {/* Target muscle selection details */}
-            <div>
-              <select
-                value={selectedMuscle || 'All'}
-                onChange={e => setSelectedMuscle(e.target.value === 'All' ? null : e.target.value)}
-                className="glass-input"
-              >
-                <option value="All">All Muscle Groups</option>
-                <option value="Chest">Chest</option>
-                <option value="Upper Chest">Upper Chest</option>
-                <option value="Lower Chest">Lower Chest</option>
-                <option value="Lats">Lats</option>
-                <option value="Lower Back">Lower Back</option>
-                <option value="Shoulders">Shoulders / Delts</option>
-                <option value="Biceps">Biceps</option>
-                <option value="Triceps">Triceps</option>
-                <option value="Quads">Quads</option>
-                <option value="Hamstrings">Hamstrings</option>
-                <option value="Calves">Calves</option>
-                <option value="Abs">Abs</option>
-              </select>
-            </div>
+        <div className="space-y-5 animate-fade-in">
 
-            <div>
-              <select
-                value={selectedDifficulty}
-                onChange={e => setSelectedDifficulty(e.target.value)}
-                className="glass-input"
-              >
-                <option value="All">All Difficulties</option>
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-              </select>
-            </div>
+          {/* ── Search bar with glow focus ── */}
+          <div className="relative">
+            <Search className="w-4.5 h-4.5 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search exercises, muscles, or movements…"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setTimeout(() => setSearchFocused(false), 150)}
+              onKeyDown={e => { if (e.key === 'Enter' && searchQuery) commitSearch(searchQuery); }}
+              className="glass-input pl-12 pr-4 py-3.5 text-sm"
+              style={{ fontSize: '14px' }}
+            />
+            {searchQuery && (
+              <button onClick={() => setSearchQuery('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                <X className="w-4 h-4" />
+              </button>
+            )}
 
-            <div>
-              <select
-                value={selectedEquipment}
-                onChange={e => setSelectedEquipment(e.target.value)}
-                className="glass-input"
+            {/* Dropdown: recent + popular */}
+            {searchFocused && !searchQuery && (
+              <div className="absolute top-full left-0 right-0 mt-2 z-30 glass-panel rounded-2xl overflow-hidden shadow-lift p-4 space-y-4">
+                {recentSearches.length > 0 && (
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs text-slate-600 font-bold uppercase tracking-wider flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> Recent</span>
+                      <button onClick={clearRecent} className="text-[10px] text-slate-600 hover:text-brand-rose">Clear</button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {recentSearches.map(r => (
+                        <button key={r} onClick={() => commitSearch(r)} className="chip text-xs">{r}</button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <span className="text-xs text-slate-600 font-bold uppercase tracking-wider flex items-center gap-1.5 mb-2"><TrendingUp className="w-3.5 h-3.5" /> Popular</span>
+                  <div className="flex flex-wrap gap-2">
+                    {POPULAR_SEARCHES.map(s => (
+                      <button key={s} onClick={() => commitSearch(s)} className="chip text-xs">{s}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ── Muscle Group chips (horizontal scroll) ── */}
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+            {MUSCLE_CHIPS.map(chip => (
+              <button
+                key={chip}
+                onClick={() => setSelectedMuscle(chip)}
+                className={`chip shrink-0 text-xs ${selectedMuscle === chip ? 'chip-active' : ''}`}
               >
-                <option value="All">All Equipments</option>
-                <option value="Full Gym">Full Gym</option>
-                <option value="Dumbbells">Dumbbells</option>
-                <option value="Bands">Resistance Bands</option>
-                <option value="Bodyweight">Bodyweight Only</option>
-              </select>
+                {chip}
+              </button>
+            ))}
+          </div>
+
+          {/* ── Secondary filters row ── */}
+          <div className="flex gap-3 flex-wrap">
+            <select value={selectedDifficulty} onChange={e => setSelectedDifficulty(e.target.value)} className="glass-input text-xs py-2" style={{ width: 'auto' }}>
+              <option value="All">All Levels</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+            <select value={selectedEquipment} onChange={e => setSelectedEquipment(e.target.value)} className="glass-input text-xs py-2" style={{ width: 'auto' }}>
+              <option value="All">All Equipment</option>
+              <option value="Full Gym">Full Gym</option>
+              <option value="Dumbbells">Dumbbells</option>
+              <option value="Bands">Bands</option>
+              <option value="Bodyweight">Bodyweight</option>
+            </select>
+            <div className="flex items-center text-xs text-slate-500 font-medium ml-auto">
+              {filteredExercises.length} exercises
             </div>
           </div>
 
-          {/* Library Cards list */}
+          {/* ── Exercise Cards ── */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {filteredExercises.map((ex) => (
-              <div 
-                key={ex.id} 
+            {filteredExercises.map(ex => (
+              <div
+                key={ex.id}
                 onClick={() => setDetailExercise(ex)}
-                className="glass-panel p-5 rounded-2xl border border-white/5 hover:border-white/10 cursor-pointer transition-all flex flex-col justify-between"
+                className="glass-panel glass-panel-hover p-5 rounded-2xl cursor-pointer flex flex-col justify-between"
               >
                 <div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[9px] bg-brand-blue/10 text-brand-blue border border-brand-blue/20 px-2.5 py-0.5 rounded-full uppercase font-bold tracking-wider">{ex.muscle_group}</span>
-                    <span className="text-[10px] text-slate-500 font-bold">{ex.difficulty}</span>
+                    <span className="text-[9px] px-2.5 py-0.5 rounded-full uppercase font-bold tracking-wider" style={{ background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.2)', color: '#22D3EE' }}>
+                      {ex.muscle_group}
+                    </span>
+                    <span className="text-[10px] text-slate-600 font-bold">{ex.difficulty}</span>
                   </div>
                   <h4 className="font-extrabold text-white text-base mt-3">{ex.name}</h4>
-                  <p className="text-slate-400 text-xs mt-1.5 line-clamp-2">{ex.description || 'No description available.'}</p>
+                  <p className="text-slate-500 text-xs mt-1.5 line-clamp-2">{ex.description || 'No description available.'}</p>
                 </div>
-                <div className="flex items-center gap-1 text-[10px] text-brand-blue font-bold mt-4 uppercase">
+                <div className="flex items-center gap-1 text-xs text-brand-cyan font-bold mt-4">
                   <span>View Details</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </div>
@@ -429,8 +445,10 @@ export default function ExerciseLibrary() {
           </div>
 
           {filteredExercises.length === 0 && (
-            <div className="p-8 text-center border border-dashed border-white/10 rounded-3xl text-slate-500 font-bold text-xs">
-              No exercises match your filter constraints. Clear filters to browse.
+            <div className="py-16 text-center rounded-3xl" style={{ border: '1px dashed rgba(255,255,255,0.08)' }}>
+              <Dumbbell className="w-10 h-10 text-slate-700 mx-auto mb-3" />
+              <p className="text-slate-600 font-semibold text-sm">No exercises match your filters.</p>
+              <button onClick={() => { setSearchQuery(''); setSelectedMuscle('All'); setSelectedDifficulty('All'); setSelectedEquipment('All'); }} className="mt-4 glass-btn-secondary text-xs py-2 px-4">Clear All Filters</button>
             </div>
           )}
         </div>

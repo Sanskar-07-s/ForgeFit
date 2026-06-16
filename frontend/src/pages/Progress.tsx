@@ -74,30 +74,31 @@ export default function Progress() {
 
   return (
     <div className="space-y-6">
-      
+
       {/* 1. Goal Progress header banner */}
-      <div className="glass-panel p-6 rounded-3xl border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="glass-panel p-6 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2 flex-1">
-          <div className="flex items-center gap-1.5 text-xs text-brand-blue font-bold uppercase tracking-wider">
-            <Award className="w-4 h-4" /> Goal Completion Progress
+          <div className="flex items-center gap-1.5 text-xs text-brand-cyan font-bold uppercase tracking-wider">
+            <Award className="w-4 h-4" />
+            Performance Lab — Goal Progress
           </div>
-          <h3 className="text-2xl font-extrabold text-white">{profile.goal} Goal</h3>
-          <p className="text-xs text-slate-400">{goalProgressReport.currentStatus}</p>
+          <h1 className="text-2xl font-extrabold text-white">{profile.goal} Goal</h1>
+          <p className="text-xs text-slate-500">{goalProgressReport.currentStatus}</p>
           <div className="flex items-center gap-4 pt-2">
             <div className="text-3xl font-extrabold text-white">{goalProgressReport.progressPct}%</div>
-            <div className="text-xs text-slate-500 font-bold">
-              Current: {goalProgressReport.currentValue} | Target: {goalProgressReport.targetValue}
+            <div className="text-xs text-slate-600 font-medium">
+              Current: {goalProgressReport.currentValue} · Target: {goalProgressReport.targetValue}
             </div>
           </div>
           <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-            <div className="bg-brand-blue h-full rounded-full" style={{ width: `${goalProgressReport.progressPct}%` }} />
+            <div className="progress-fill-cyan h-full" style={{ width: `${goalProgressReport.progressPct}%` }} />
           </div>
         </div>
 
-        <div className="glass-panel px-6 py-4 rounded-2xl border border-white/5 text-center shrink-0">
-          <div className="text-slate-500 text-[10px] uppercase font-bold">Calculated BMI</div>
+        <div className="glass-panel px-6 py-4 rounded-2xl text-center shrink-0">
+          <div className="text-slate-500 text-[10px] uppercase font-bold">BMI Index</div>
           <div className="text-3xl font-extrabold text-white mt-1">{currentBmi}</div>
-          <span className="text-[10px] text-brand-blue font-bold">Normal Index (18.5 - 24.9)</span>
+          <span className="text-[10px] text-brand-cyan font-bold">Normal: 18.5 – 24.9</span>
         </div>
       </div>
 
