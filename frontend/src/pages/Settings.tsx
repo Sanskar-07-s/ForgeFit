@@ -142,6 +142,22 @@ export default function Settings() {
     reader.readAsText(file);
   };
 
+  const handleClearSavedData = () => {
+    if (window.confirm("WARNING: This will permanently delete all your local settings, logged workouts, connected devices, and streaks. This cannot be undone. Are you sure you want to proceed?")) {
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('forgefit_')) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+      
+      alert("All local ForgeFit data has been cleared. Reloading page...");
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="space-y-6">
 
@@ -368,6 +384,28 @@ export default function Settings() {
           </div>
         </div>
 
+      </div>
+
+      {/* Danger Zone */}
+      <div className="glass-panel p-6 rounded-3xl border border-brand-rose/20 bg-brand-rose/[0.01] space-y-4">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-brand-rose shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <h3 className="font-extrabold text-white text-sm">Danger Zone</h3>
+            <p className="text-xs text-slate-500 max-w-xl leading-relaxed">
+              Permanently clear all ForgeFit local data. This will reset your streaks, workout history, nutrition logs, connected devices, and custom settings.
+            </p>
+          </div>
+        </div>
+
+        <div className="pt-2 border-t border-white/5 flex justify-end">
+          <button
+            onClick={handleClearSavedData}
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-rose/10 border border-brand-rose/30 hover:bg-brand-rose/20 text-brand-rose transition-all"
+          >
+            Clear All Saved Data
+          </button>
+        </div>
       </div>
 
     </div>
