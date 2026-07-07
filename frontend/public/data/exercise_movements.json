@@ -1,0 +1,106 @@
+{
+  "push up": [
+    { "pct": 0.0,  "bodyPos": [0, -0.53, 0], "bodyRot": [-1.43, 0, 0], "rShoulderRot": [0, 0, -1.2], "lShoulderRot": [0, 0, 1.2], "rUpperArmRot": [0, 0, -0.15], "lUpperArmRot": [0, 0, 0.15], "rForearmRot": [0, -0.10, 0], "lForearmRot": [0, 0.10, 0] },
+    { "pct": 0.33, "bodyPos": [0, -0.60, 0], "bodyRot": [-1.43, 0, 0], "rShoulderRot": [0, 0, -1.2], "lShoulderRot": [0, 0, 1.2], "rUpperArmRot": [0, 0, -0.15], "lUpperArmRot": [0, 0, 0.15], "rForearmRot": [0, -0.48, 0], "lForearmRot": [0, 0.48, 0] },
+    { "pct": 0.67, "bodyPos": [0, -0.69, 0], "bodyRot": [-1.43, 0, 0], "rShoulderRot": [0, 0, -1.2], "lShoulderRot": [0, 0, 1.2], "rUpperArmRot": [0, 0, -0.15], "lUpperArmRot": [0, 0, 0.15], "rForearmRot": [0, -0.88, 0], "lForearmRot": [0, 0.88, 0] },
+    { "pct": 1.0,  "bodyPos": [0, -0.73, 0], "bodyRot": [-1.43, 0, 0], "rShoulderRot": [0, 0, -1.2], "lShoulderRot": [0, 0, 1.2], "rUpperArmRot": [0, 0, -0.15], "lUpperArmRot": [0, 0, 0.15], "rForearmRot": [0, -1.10, 0], "lForearmRot": [0, 1.10, 0] }
+  ],
+
+  "pull up": [
+    { "pct": 0.0,  "bodyPos": [0, -0.56, 0], "rUpperArmRot": [0, 0, -2.85], "lUpperArmRot": [0, 0, 2.85], "rForearmRot": [0.10, 0, 0], "lForearmRot": [0.10, 0, 0], "barbellPos": [0, 1.4, 0], "barbellVisible": true },
+    { "pct": 0.33, "bodyPos": [0, -0.32, 0], "rUpperArmRot": [0, 0, -2.30], "lUpperArmRot": [0, 0, 2.30], "rForearmRot": [0.65, 0, 0], "lForearmRot": [0.65, 0, 0], "barbellPos": [0, 1.4, 0], "barbellVisible": true },
+    { "pct": 0.67, "bodyPos": [0,  0.02, 0], "rUpperArmRot": [0, 0, -1.55], "lUpperArmRot": [0, 0, 1.55], "rForearmRot": [1.40, 0, 0], "lForearmRot": [1.40, 0, 0], "barbellPos": [0, 1.4, 0], "barbellVisible": true },
+    { "pct": 1.0,  "bodyPos": [0,  0.14, 0], "rUpperArmRot": [0, 0, -0.95], "lUpperArmRot": [0, 0, 0.95], "rForearmRot": [2.05, 0, 0], "lForearmRot": [2.05, 0, 0], "barbellPos": [0, 1.4, 0], "barbellVisible": true }
+  ],
+
+  "bench press": [
+    { "pct": 0.0,  "bodyPos": [0, -0.66, 0], "bodyRot": [-1.57, 0, 0], "rShoulderRot": [0, 0, -1.4], "lShoulderRot": [0, 0, 1.4], "rUpperArmRot": [0, -0.20, 0], "lUpperArmRot": [0, 0.20, 0], "rForearmRot": [0, 0, 0.10], "lForearmRot": [0, 0, -0.10], "barbellPos": [0, 0.57, 0], "barbellVisible": true },
+    { "pct": 0.33, "bodyPos": [0, -0.66, 0], "bodyRot": [-1.57, 0, 0], "rShoulderRot": [0, 0, -1.4], "lShoulderRot": [0, 0, 1.4], "rUpperArmRot": [0, -0.38, 0], "lUpperArmRot": [0, 0.38, 0], "rForearmRot": [0, 0, 0.42], "lForearmRot": [0, 0, -0.42], "barbellPos": [0, 0.46, 0], "barbellVisible": true },
+    { "pct": 0.67, "bodyPos": [0, -0.66, 0], "bodyRot": [-1.57, 0, 0], "rShoulderRot": [0, 0, -1.4], "lShoulderRot": [0, 0, 1.4], "rUpperArmRot": [0, -0.60, 0], "lUpperArmRot": [0, 0.60, 0], "rForearmRot": [0, 0, 0.78], "lForearmRot": [0, 0, -0.78], "barbellPos": [0, 0.34, 0], "barbellVisible": true },
+    { "pct": 1.0,  "bodyPos": [0, -0.66, 0], "bodyRot": [-1.57, 0, 0], "rShoulderRot": [0, 0, -1.4], "lShoulderRot": [0, 0, 1.4], "rUpperArmRot": [0, -0.70, 0], "lUpperArmRot": [0, 0.70, 0], "rForearmRot": [0, 0, 0.95], "lForearmRot": [0, 0, -0.95], "barbellPos": [0, 0.27, 0], "barbellVisible": true }
+  ],
+
+  "squat": [
+    { "pct": 0.0,  "bodyPos": [0, -0.11, 0], "waistRot": [0, 0, 0], "rThighRot": [0, 0, 0], "lThighRot": [0, 0, 0], "rCalfRot": [0, 0, 0], "lCalfRot": [0, 0, 0], "barbellPos": [0, 0.64, -0.12], "barbellVisible": true },
+    { "pct": 0.33, "bodyPos": [0, -0.28, -0.05], "waistRot": [0.22, 0, 0], "rThighRot": [-0.58, 0,  0.12], "lThighRot": [-0.58, 0, -0.12], "rCalfRot": [0.52, 0, 0], "lCalfRot": [0.52, 0, 0], "barbellPos": [0, 0.51, -0.17], "barbellVisible": true },
+    { "pct": 0.67, "bodyPos": [0, -0.47, -0.13], "waistRot": [0.48, 0, 0], "rThighRot": [-1.22, 0,  0.19], "lThighRot": [-1.22, 0, -0.19], "rCalfRot": [1.15, 0, 0], "lCalfRot": [1.15, 0, 0], "barbellPos": [0, 0.34, -0.25], "barbellVisible": true },
+    { "pct": 1.0,  "bodyPos": [0, -0.63, -0.17], "waistRot": [0.65, 0, 0], "rThighRot": [-1.65, 0,  0.24], "lThighRot": [-1.65, 0, -0.24], "rCalfRot": [1.60, 0, 0], "lCalfRot": [1.60, 0, 0], "barbellPos": [0, 0.18, -0.30], "barbellVisible": true }
+  ],
+
+  "deadlift": [
+    { "pct": 0.0,  "bodyPos": [0, -0.11, 0], "waistRot": [0, 0, 0], "rThighRot": [0, 0, 0], "lThighRot": [0, 0, 0], "rCalfRot": [0, 0, 0], "lCalfRot": [0, 0, 0], "rUpperArmRot": [0, 0, 0], "lUpperArmRot": [0, 0, 0], "barbellPos": [0, 0.44, 0.25], "barbellVisible": true },
+    { "pct": 0.33, "bodyPos": [0, -0.22, -0.08], "waistRot": [0.38, 0, 0], "rThighRot": [-0.20, 0, 0], "lThighRot": [-0.20, 0, 0], "rCalfRot": [0.30, 0, 0], "lCalfRot": [0.30, 0, 0], "rUpperArmRot": [-0.22, 0, 0], "lUpperArmRot": [-0.22, 0, 0], "barbellPos": [0, 0.22, 0.25], "barbellVisible": true },
+    { "pct": 0.67, "bodyPos": [0, -0.38, -0.18], "waistRot": [0.90, 0, 0], "rThighRot": [-0.44, 0, 0], "lThighRot": [-0.44, 0, 0], "rCalfRot": [0.60, 0, 0], "lCalfRot": [0.60, 0, 0], "rUpperArmRot": [-0.56, 0, 0], "lUpperArmRot": [-0.56, 0, 0], "barbellPos": [0, -0.03, 0.25], "barbellVisible": true },
+    { "pct": 1.0,  "bodyPos": [0, -0.49, -0.25], "waistRot": [1.20, 0, 0], "rThighRot": [-0.58, 0, 0], "lThighRot": [-0.58, 0, 0], "rCalfRot": [0.78, 0, 0], "lCalfRot": [0.78, 0, 0], "rUpperArmRot": [-0.75, 0, 0], "lUpperArmRot": [-0.75, 0, 0], "barbellPos": [0, -0.29, 0.25], "barbellVisible": true }
+  ],
+
+  "shoulder press": [
+    { "pct": 0.0,  "rUpperArmRot": [0, 0, -0.40], "lUpperArmRot": [0, 0, 0.40], "rForearmRot": [1.6, 0, 0], "lForearmRot": [1.6, 0, 0], "barbellPos": [0, 0.61, 0.22], "barbellVisible": true },
+    { "pct": 0.33, "rUpperArmRot": [0, 0, -1.10], "lUpperArmRot": [0, 0, 1.10], "rForearmRot": [1.2, 0, 0], "lForearmRot": [1.2, 0, 0], "barbellPos": [0, 0.77, 0.16], "barbellVisible": true },
+    { "pct": 0.67, "rUpperArmRot": [0, 0, -1.90], "lUpperArmRot": [0, 0, 1.90], "rForearmRot": [0.75, 0, 0], "lForearmRot": [0.75, 0, 0], "barbellPos": [0, 0.96, 0.08], "barbellVisible": true },
+    { "pct": 1.0,  "rUpperArmRot": [0, 0, -2.85], "lUpperArmRot": [0, 0, 2.85], "rForearmRot": [0.10, 0, 0], "lForearmRot": [0.10, 0, 0], "barbellPos": [0, 1.24, 0.00], "barbellVisible": true }
+  ],
+
+  "bicep curl": [
+    { "pct": 0.0,  "rUpperArmRot": [0.15, 0, 0], "lUpperArmRot": [0.15, 0, 0], "rForearmRot": [0.10, 0, 0], "lForearmRot": [0.10, 0, 0] },
+    { "pct": 0.33, "rUpperArmRot": [0.15, 0, 0], "lUpperArmRot": [0.15, 0, 0], "rForearmRot": [0.75, 0, 0], "lForearmRot": [0.75, 0, 0] },
+    { "pct": 0.67, "rUpperArmRot": [0.15, 0, 0], "lUpperArmRot": [0.15, 0, 0], "rForearmRot": [1.55, 0, 0], "lForearmRot": [1.55, 0, 0] },
+    { "pct": 1.0,  "rUpperArmRot": [0.15, 0, 0], "lUpperArmRot": [0.15, 0, 0], "rForearmRot": [2.25, 0, 0], "lForearmRot": [2.25, 0, 0] }
+  ],
+
+  "tricep extension": [
+    { "pct": 0.0,  "rUpperArmRot": [0.10, 0, 0], "lUpperArmRot": [0.10, 0, 0], "rForearmRot": [1.57, 0, 0], "lForearmRot": [1.57, 0, 0] },
+    { "pct": 0.33, "rUpperArmRot": [0.10, 0, 0], "lUpperArmRot": [0.10, 0, 0], "rForearmRot": [1.15, 0, 0], "lForearmRot": [1.15, 0, 0] },
+    { "pct": 0.67, "rUpperArmRot": [0.10, 0, 0], "lUpperArmRot": [0.10, 0, 0], "rForearmRot": [0.65, 0, 0], "lForearmRot": [0.65, 0, 0] },
+    { "pct": 1.0,  "rUpperArmRot": [0.10, 0, 0], "lUpperArmRot": [0.10, 0, 0], "rForearmRot": [0.08, 0, 0], "lForearmRot": [0.08, 0, 0] }
+  ],
+
+  "leg press": [
+    { "pct": 0.0,  "bodyRot": [-0.78, 0, 0], "bodyPos": [0, -0.31, 0], "rHipRot": [-0.20, 0, 0], "lHipRot": [-0.20, 0, 0], "rThighRot": [0.00, 0, 0], "lThighRot": [0.00, 0, 0], "rCalfRot": [0.10, 0, 0], "lCalfRot": [0.10, 0, 0] },
+    { "pct": 0.33, "bodyRot": [-0.78, 0, 0], "bodyPos": [0, -0.31, 0], "rHipRot": [-0.50, 0, 0], "lHipRot": [-0.50, 0, 0], "rThighRot": [0.22, 0, 0], "lThighRot": [0.22, 0, 0], "rCalfRot": [0.55, 0, 0], "lCalfRot": [0.55, 0, 0] },
+    { "pct": 0.67, "bodyRot": [-0.78, 0, 0], "bodyPos": [0, -0.31, 0], "rHipRot": [-0.90, 0, 0], "lHipRot": [-0.90, 0, 0], "rThighRot": [0.58, 0, 0], "lThighRot": [0.58, 0, 0], "rCalfRot": [1.20, 0, 0], "lCalfRot": [1.20, 0, 0] },
+    { "pct": 1.0,  "bodyRot": [-0.78, 0, 0], "bodyPos": [0, -0.31, 0], "rHipRot": [-1.25, 0, 0], "lHipRot": [-1.25, 0, 0], "rThighRot": [0.78, 0, 0], "lThighRot": [0.78, 0, 0], "rCalfRot": [1.65, 0, 0], "lCalfRot": [1.65, 0, 0] }
+  ],
+
+  "lat pulldown": [
+    { "pct": 0.0,  "rUpperArmRot": [0, 0, -2.85], "lUpperArmRot": [0, 0, 2.85], "rForearmRot": [0.10, 0, 0], "lForearmRot": [0.10, 0, 0], "barbellPos": [0, 1.29, 0], "barbellVisible": true },
+    { "pct": 0.33, "rUpperArmRot": [0, 0, -2.28], "lUpperArmRot": [0, 0, 2.28], "rForearmRot": [0.55, 0, 0], "lForearmRot": [0.55, 0, 0], "barbellPos": [0, 1.16, 0], "barbellVisible": true },
+    { "pct": 0.67, "rUpperArmRot": [0, 0, -1.60], "lUpperArmRot": [0, 0, 1.60], "rForearmRot": [1.10, 0, 0], "lForearmRot": [1.10, 0, 0], "barbellPos": [0, 1.02, 0], "barbellVisible": true },
+    { "pct": 1.0,  "rUpperArmRot": [0, 0, -0.75], "lUpperArmRot": [0, 0, 0.75], "rForearmRot": [1.85, 0, 0], "lForearmRot": [1.85, 0, 0], "barbellPos": [0, 0.77, 0], "barbellVisible": true }
+  ],
+
+  "row": [
+    { "pct": 0.0,  "waistRot": [0.25, 0, 0], "rUpperArmRot": [-0.55, 0, 0], "lUpperArmRot": [-0.55, 0, 0], "rForearmRot": [0.10, 0, 0], "lForearmRot": [0.10, 0, 0], "barbellPos": [0, 0.29, 0.65], "barbellVisible": true },
+    { "pct": 0.33, "waistRot": [0.18, 0, 0], "rUpperArmRot": [-0.22, 0, 0], "lUpperArmRot": [-0.22, 0, 0], "rForearmRot": [0.48, 0, 0], "lForearmRot": [0.48, 0, 0], "barbellPos": [0, 0.29, 0.50], "barbellVisible": true },
+    { "pct": 0.67, "waistRot": [0.08, 0, 0], "rUpperArmRot": [ 0.18, 0, 0], "lUpperArmRot": [ 0.18, 0, 0], "rForearmRot": [0.88, 0, 0], "lForearmRot": [0.88, 0, 0], "barbellPos": [0, 0.29, 0.38], "barbellVisible": true },
+    { "pct": 1.0,  "waistRot": [-0.08, 0, 0], "rUpperArmRot": [ 0.85, 0, 0], "lUpperArmRot": [ 0.85, 0, 0], "rForearmRot": [1.60, 0, 0], "lForearmRot": [1.60, 0, 0], "barbellPos": [0, 0.29, 0.20], "barbellVisible": true }
+  ],
+
+  "leg extension": [
+    { "pct": 0.0,  "bodyPos": [0, 0.09, 0], "rCalfRot": [1.50, 0, 0], "lCalfRot": [1.50, 0, 0] },
+    { "pct": 0.33, "bodyPos": [0, 0.09, 0], "rCalfRot": [1.00, 0, 0], "lCalfRot": [1.00, 0, 0] },
+    { "pct": 0.67, "bodyPos": [0, 0.09, 0], "rCalfRot": [0.50, 0, 0], "lCalfRot": [0.50, 0, 0] },
+    { "pct": 1.0,  "bodyPos": [0, 0.09, 0], "rCalfRot": [0.04, 0, 0], "lCalfRot": [0.04, 0, 0] }
+  ],
+
+  "leg curl": [
+    { "pct": 0.0,  "bodyRot": [-1.57, 0, 0], "bodyPos": [0, -0.71, 0], "rCalfRot": [0.08, 0, 0], "lCalfRot": [0.08, 0, 0] },
+    { "pct": 0.33, "bodyRot": [-1.57, 0, 0], "bodyPos": [0, -0.71, 0], "rCalfRot": [0.65, 0, 0], "lCalfRot": [0.65, 0, 0] },
+    { "pct": 0.67, "bodyRot": [-1.57, 0, 0], "bodyPos": [0, -0.71, 0], "rCalfRot": [1.30, 0, 0], "lCalfRot": [1.30, 0, 0] },
+    { "pct": 1.0,  "bodyRot": [-1.57, 0, 0], "bodyPos": [0, -0.71, 0], "rCalfRot": [2.05, 0, 0], "lCalfRot": [2.05, 0, 0] }
+  ],
+
+  "calf raise": [
+    { "pct": 0.0,  "bodyPos": [0, -0.31, 0], "rCalfRot": [0, 0,  0.20], "lCalfRot": [0, 0, -0.20] },
+    { "pct": 0.33, "bodyPos": [0, -0.27, 0], "rCalfRot": [0, 0,  0.07], "lCalfRot": [0, 0, -0.07] },
+    { "pct": 0.67, "bodyPos": [0, -0.22, 0], "rCalfRot": [0, 0, -0.12], "lCalfRot": [0, 0,  0.12] },
+    { "pct": 1.0,  "bodyPos": [0, -0.19, 0], "rCalfRot": [0, 0, -0.32], "lCalfRot": [0, 0,  0.32] }
+  ],
+
+  "plank": [
+    { "pct": 0.0,  "bodyRot": [-1.43, 0, 0], "bodyPos": [0, -0.63, 0], "rShoulderRot": [0, 0, -1.0], "lShoulderRot": [0, 0, 1.0] },
+    { "pct": 0.25, "bodyRot": [-1.43, 0, 0], "bodyPos": [0, -0.622, 0], "rShoulderRot": [0, 0, -1.0], "lShoulderRot": [0, 0, 1.0] },
+    { "pct": 0.75, "bodyRot": [-1.43, 0, 0], "bodyPos": [0, -0.638, 0], "rShoulderRot": [0, 0, -1.0], "lShoulderRot": [0, 0, 1.0] },
+    { "pct": 1.0,  "bodyRot": [-1.43, 0, 0], "bodyPos": [0, -0.63, 0], "rShoulderRot": [0, 0, -1.0], "lShoulderRot": [0, 0, 1.0] }
+  ]
+}

@@ -1,0 +1,60 @@
+name: ⚡ Supabase Keep-Alive Ping
+
+# Runs every day at 09:00 UTC
+# Supabase free-tier pauses after 7 days of inactivity.
+# This ping ensures the project stays awake indefinitely.
+on:
+  schedule:
+    - cron: '0 9 * * *'   # daily at 09:00 UTC
+  workflow_dispatch:       # allow manual trigger from GitHub Actions UI
+
+jobs:
+  ping:
+    name: Ping Supabase Health
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 🏓 Ping Supabase REST endpoint
+        run: |
+          echo "Pinging Supabase project: $SUPABASE_URL"
+
+          HTTP_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" \
+            --max-time 15 \
+            --header "apikey: $SUPABASE_ANON_KEY" \
+            --header "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "$SUPABASE_URL/rest/v1/")
+
+          echo "HTTP Status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 500 ]; then
+            echo "✅ Supabase is alive (HTTP $HTTP_STATUS)"
+          else
+            echo "❌ Unexpected status: $HTTP_STATUS — project may be paused or unreachable"
+            exit 1
+          fi
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+      - name: 🏓 Ping Supabase Auth health
+        run: |
+          HTTP_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" \
+            --max-time 15 \
+            "$SUPABASE_URL/auth/v1/health")
+
+          echo "Auth health HTTP Status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 500 ]; then
+            echo "✅ Supabase Auth is healthy (HTTP $HTTP_STATUS)"
+          else
+            echo "⚠️ Auth health returned $HTTP_STATUS (non-critical)"
+          fi
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+
+      - name: 📝 Log result
+        if: always()
+        run: |
+          echo "Keep-alive ping completed at $(date -u)"
+          echo "Next ping scheduled in ~24 hours"

@@ -1,6 +1,7 @@
 // ForgeFit AI - Workout Generator & Active Tracker Page (v4.3)
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFitnessData } from '../context/FitnessDataContext';
 import { generateWorkoutSplit } from '@ai/workout-planner';
@@ -17,7 +18,8 @@ import {
   Maximize2,
   ChevronRight,
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  Zap
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -33,6 +35,7 @@ interface TrackingSet {
 export default function Workouts() {
   const { profile } = useAuth();
   const { workouts, exercises, createWorkout, logWorkoutSession, workoutLogs } = useFitnessData();
+  const navigate = useNavigate();
 
   // Generator states
   const [showGenerator, setShowGenerator] = useState(false);
@@ -418,12 +421,20 @@ export default function Workouts() {
                   <p className="text-[11px] text-slate-400 mt-1">Saves default progression overload notes per exercise.</p>
                 </div>
                 
-                <button 
-                  onClick={() => handleStartWorkout(w)}
-                  className="w-full glass-btn-primary flex items-center justify-center gap-1.5 py-2 mt-6 text-xs"
-                >
-                  <Play className="w-3.5 h-3.5 fill-white" /> Start Workout Session
-                </button>
+                <div className="grid grid-cols-2 gap-2 mt-6">
+                  <button 
+                    onClick={() => handleStartWorkout(w)}
+                    className="glass-btn-secondary flex items-center justify-center gap-1 py-2 text-[10px] font-bold"
+                  >
+                    <Play className="w-3 h-3 fill-slate-400" /> Quick Log
+                  </button>
+                  <button 
+                    onClick={() => navigate('/coach-session', { state: { workout: w } })}
+                    className="glass-btn-primary flex items-center justify-center gap-1 py-2 text-[10px] font-bold"
+                  >
+                    <Zap className="w-3 h-3 animate-pulse" /> Live 3D Coach
+                  </button>
+                </div>
               </div>
             ))}
 
